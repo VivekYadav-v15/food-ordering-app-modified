@@ -5,6 +5,7 @@ import { Inter, Poppins, Playfair_Display, Outfit, Nunito_Sans } from 'next/font
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import { Toaster } from 'react-hot-toast';
+import AuthProvider from '@/components/AuthProvider'; // <-- 1. IMPORT IT HERE
 
 // Beautiful font combinations for different purposes
 const inter = Inter({ 
@@ -55,32 +56,35 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable} ${playfair.variable} ${outfit.variable} ${nunito.variable} font-sans`}>
-        <Navbar />
-        <main>{children}</main>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: '#333',
-              color: '#fff',
-            },
-            success: {
+        {/* 2. WRAP EVERYTHING INSIDE THE <body> */}
+        <AuthProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Toaster
+            position="top-center"
+            toastOptions={{
               duration: 3000,
-              iconTheme: {
-                primary: '#10b981',
-                secondary: '#fff',
+              style: {
+                background: '#333',
+                color: '#fff',
               },
-            },
-            error: {
-              duration: 4000,
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#fff',
+              success: {
+                duration: 3000,
+                iconTheme: {
+                  primary: '#10b981',
+                  secondary: '#fff',
+                },
               },
-            },
-          }}
-        />
+              error: {
+                duration: 4000,
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

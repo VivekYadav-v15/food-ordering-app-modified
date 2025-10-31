@@ -5,9 +5,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { ShoppingCart, Menu, X, Home, Store, UtensilsCrossed } from 'lucide-react';
+// <-- 1. IMPORTED User & LogOut ICONS -->
+import { ShoppingCart, Menu, X, Home, Store, UtensilsCrossed, User, LogOut } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { motion, AnimatePresence } from 'framer-motion';
+// <-- 2. IMPORTED NEXT-AUTH -->
+import { useSession, signIn, signOut } from 'next-auth/react';
+// <-- 3. IMPORTED IMAGE -->
+import Image from 'next/image';
 
 export default function Navbar() {
   const router = useRouter();
@@ -15,6 +20,9 @@ export default function Navbar() {
   const { getTotalItems } = useCartStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mode, setMode] = useState<'restaurant' | 'canteen'>('restaurant');
+
+  // <-- 4. GET THE USER SESSION -->
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const savedMode = localStorage.getItem('appMode') as 'restaurant' | 'canteen';
@@ -104,6 +112,44 @@ export default function Navbar() {
                 </motion.span>
               )}
             </Link>
+
+            {/* --- 5. NEW LOGIN/LOGOUT BUTTONS (Desktop) --- */}
+            {status === 'loading' ? (
+              // Show a loading skeleton
+              <div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div>
+            ) : session ? (
+              // If logged in, show image and logout
+              <div className="flex items-center gap-4">
+                {/* --- ADDED LINK WRAPPER --- */}
+                <Link href="/profile" title="My Profile">
+                  <Image
+                    src={session.user.image!}
+                    alt={session.user.name || 'User'}
+                    width={44}
+                    height={44}
+                    className="rounded-full border-2 border-white shadow-md hover:opacity-80 transition-opacity cursor-pointer"
+                  />
+                </Link>
+                {/* --- END OF LINK --- */}
+                <button
+                  onClick={() => signOut()}
+                  title="Log Out"
+                  className="p-2 rounded-full text-gray-500 hover:text-red-600 hover:bg-gray-100 transition-all"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              // If logged out, show "Log In"
+              <button
+                onClick={() => signIn('google')}
+                className="font-modern font-semibold text-gray-700 hover:text-orange-600 transition-all"
+              >
+                Log In
+              </button>
+            )}
+            {/* --- END OF NEW LOGIN/LOGOUT --- */}
+
           </div>
 
           {/* Mobile Menu Button */}
@@ -184,6 +230,65 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
+
+                {/* --- 6. NEW LOGIN/LOGOUT BUTTONS (Mobile) --- */}
+                <div className="border-t border-gray-200/60 pt-5 mt-5">
+                  {status === 'loading' ? (
+                    // Show a loading skeleton
+                    <div className="h-12 bg-gray-200 rounded-xl animate-pulse w-full"></div>
+                  ) : session ? (
+  // If logged in, show name and logout
+  <div className="flex flex-col gap-4">
+    <div className="flex items-center gap-3">
+      <Image
+        src={session.user.image!}
+        alt={session.user.name || 'User'}
+        width={40}
+        height={40}
+        className="rounded-full border-2 border-white shadow-md"
+      />
+      <span className="font-semibold text-gray-800 line-clamp-1">
+        {session.user.name}
+      </span>
+    </div>
+
+    {/* --- ADDED "MY PROFILE" BUTTON --- */}
+    <Link
+      href="/profile"
+      onClick={() => setMobileMenuOpen(false)}
+      className="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl font-semibold transition-all bg-gray-100 text-gray-700 hover:bg-gray-200"
+    >
+      <User className="w-5 h-5" />
+      My Profile
+    </Link>
+    {/* --- END OF BUTTON --- */}
+
+    <button
+      onClick={() => {
+        signOut();
+        setMobileMenuOpen(false);
+      }}
+      className="font-modern font-semibold text-sm text-red-500 hover:text-red-700 p-2 text-center"
+    >
+      Log Out
+    </button>
+  </div>
+) : (
+                    // If logged out, show "Log In"
+                    <button
+                      onClick={() => {
+                        signIn('google');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex items-center justify-center gap-3 w-full px-4 py-4 rounded-xl font-semibold transition-all bg-white text-gray-700 shadow-md hover:bg-gray-50"
+                    >
+                      <User className="w-5 h-5" />
+                      Log In / Sign Up
+                    </button>
+                  )}
+                </div>
+                {/* --- END OF NEW MOBILE LOGIN --- */}
+
               </div>
             </motion.div>
           )}

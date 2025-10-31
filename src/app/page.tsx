@@ -42,7 +42,9 @@ export default function HomePage() {
     try {
       const response = await fetch('/api/restaurants?canteen=false');
       const data = await response.json();
-      setRestaurants(data.slice(0, 6)); // Show only top 6 for homepage
+      if (Array.isArray(data)) {
+  setRestaurants(data.slice(0, 6)); // Show only top 6 for homepage
+}
     } catch (error) {
       console.error('Error fetching restaurants:', error);
     } finally {
@@ -81,6 +83,13 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0">
+          {/* --- PASTE YOUR NEW IMAGE CODE HERE --- */}
+  <img 
+    src="https://plus.unsplash.com/premium_photo-1661766131927-5026561fd0cc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070" 
+    alt="Hero background" 
+    className="absolute inset-0 w-full h-full object-cover opacity-30 backdrop-blur-sm"
+  />
+
           <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
           <div className="absolute top-40 right-10 w-96 h-96 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
           <div className="absolute -bottom-8 left-20 w-80 h-80 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '4s' }}></div>
@@ -102,7 +111,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 glass-effect-light px-6 py-3 rounded-full text-sm font-semibold text-orange-400 mb-6"
               >
                 <Sparkles className="w-4 h-4" />
-                India's Most Loved Food Delivery
+                India's Most Fastest Food Delivery
               </motion.div>
 
               <motion.h1
@@ -115,7 +124,7 @@ export default function HomePage() {
                 <br />
                 <span className="text-white">Food</span>
                 <br />
-                <span className="text-orange-400">Delivered</span>
+                <span className="text-orange-400">Delivered At Your Doorstep</span>
               </motion.h1>
 
               <motion.p
@@ -162,11 +171,11 @@ export default function HomePage() {
               <div className="relative">
                 <div className="w-full h-96 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-3xl shadow-2xl overflow-hidden animate-food-glow">
                   <img 
-                    src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                    src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=987"
                     alt="Delicious Indian Food"
                     className="w-full h-full object-cover rounded-3xl"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-red-500/20 to-pink-500/20 rounded-3xl"></div>
+                  
                 </div>
                 
                 {/* Floating Cards */}
@@ -324,7 +333,7 @@ export default function HomePage() {
             >
                   <div className="relative h-48 overflow-hidden">
                     <img 
-                      src={`https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80&w=400&h=300&fit=crop&crop=center`}
+                      src={restaurant.image_url || `https://images.unsplash.com/photo-1613564834361-9436948817d1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGl6emF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=900`}
                       alt={restaurant.name}
                       className="w-full h-full object-cover"
                     />

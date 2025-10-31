@@ -90,66 +90,66 @@ export default function RestaurantListPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {restaurants.map((restaurant, index) => (
-              <motion.div
-                key={restaurant.restaurant_id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -12, scale: 1.02, transition: { duration: 0.3 } }}
-                onClick={() => router.push(`/restaurant/${restaurant.restaurant_id}`)}
-                className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all border border-white/20 backdrop-blur-sm"
-              >
-                {/* Restaurant Image */}
-                <div className="relative h-56 bg-gradient-to-br from-orange-400 via-red-400 to-pink-400 flex items-center justify-center text-8xl">
-                  <div className="absolute inset-0 flex items-center justify-center text-white text-8xl">
-                    🍛
-                  </div>
-                  {/* Rating Badge */}
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-bold text-gray-800">
-                      {restaurant.rating.toFixed(1)}
-                    </span>
-                  </div>
-                </div>
+            {Array.isArray(restaurants) && restaurants.map((restaurant, index) => (
+  <motion.div
+    key={restaurant.restaurant_id}
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+    whileHover={{ y: -12, scale: 1.02, transition: { duration: 0.3 } }}
+    onClick={() => router.push(`/restaurant/${restaurant.restaurant_id}`)}
+    className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer hover:shadow-2xl transition-all border border-white/20 backdrop-blur-sm"
+  >
+    {/* Restaurant Image */}
+    <div className="relative h-56 bg-gradient-to-br from-orange-400 via-red-400 to-pink-400 flex items-center justify-center text-8xl">
+      <div className="absolute inset-0 flex items-center justify-center text-white text-8xl">
+        🍛
+      </div>
+      {/* Rating Badge */}
+      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+        <span className="font-bold text-gray-800">
+          {restaurant.rating.toFixed(1)}
+        </span>
+      </div>
+    </div>
 
-                {/* Restaurant Info */}
-                <div className="p-8">
-                  <h2 className="text-heading-elegant font-elegant font-bold text-gray-900 mb-4">
-                    {restaurant.name}
-                  </h2>
+    {/* Restaurant Info */}
+    <div className="p-8">
+      <h2 className="text-heading-elegant font-elegant font-bold text-gray-900 mb-4">
+        {restaurant.name}
+      </h2>
 
-                  <div className="space-y-3 mb-6">
-                    {restaurant.cuisine_type && (
-                      <div className="flex items-center text-gray-600">
-                        <span className="text-orange-600 mr-2">🍽️</span>
-                        <span className="text-sm font-medium">{restaurant.cuisine_type}</span>
-                      </div>
-                    )}
-                    
-                    {restaurant.address && (
-                      <div className="flex items-start text-gray-600">
-                        <MapPin className="w-4 h-4 text-orange-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm line-clamp-2">{restaurant.address}</span>
-                      </div>
-                    )}
-                    
-                    {restaurant.operating_hours && (
-                      <div className="flex items-center text-gray-600">
-                        <Clock className="w-4 h-4 text-orange-600 mr-2" />
-                        <span className="text-sm">{restaurant.operating_hours}</span>
-                      </div>
-                    )}
-                  </div>
+      <div className="space-y-3 mb-6">
+        {restaurant.cuisine_type && (
+          <div className="flex items-center text-gray-600">
+            <span className="text-orange-600 mr-2">🍽️</span>
+            <span className="text-sm font-medium">{restaurant.cuisine_type}</span>
+          </div>
+        )}
+        
+        {restaurant.address && (
+          <div className="flex items-start text-gray-600">
+            <MapPin className="w-4 h-4 text-orange-600 mr-2 mt-0.5 flex-shrink-0" />
+            <span className="text-sm line-clamp-2">{restaurant.address}</span>
+          </div>
+        )}
+        
+        {restaurant.operating_hours && (
+          <div className="flex items-center text-gray-600">
+            <Clock className="w-4 h-4 text-orange-600 mr-2" />
+            <span className="text-sm">{restaurant.operating_hours}</span>
+          </div>
+        )}
+      </div>
 
-                  <button className="w-full btn-primary flex items-center justify-center gap-3 py-4 text-lg">
-                    View Menu
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+      <button className="w-full btn-primary flex items-center justify-center gap-3 py-4 text-lg">
+        View Menu
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  </motion.div>
+))}
           </div>
         )}
       </div>

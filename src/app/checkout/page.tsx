@@ -2,15 +2,17 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CreditCard, Home, ShoppingBag, User, Phone, Mail, MapPin, ArrowLeft } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const { items, restaurantId, restaurantName, getTotalPrice, clearCart } = useCartStore();
   
   const [orderType, setOrderType] = useState<'delivery' | 'takeaway'>('takeaway');
@@ -28,6 +30,38 @@ export default function CheckoutPage() {
   const deliveryFee = orderType === 'delivery' ? 40 : 0;
   const tax = getTotalPrice() * 0.05;
   const totalAmount = getTotalPrice() + tax + deliveryFee;
+  useEffect(() => {
+    // Check if the user is logged in
+    if (status === 'authenticated') {
+      
+      // Fetch their saved profile data
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            // Now, pre-fill the form with their saved info
+            // and their email (from the session)
+            setFormData(prevData => ({
+              ...prevData, // Keep any other data (like 'notes')
+              customerName: data.name || '',
+              customerPhone: data.phone || '',
+              deliveryAddress: data.address || '',
+              customerEmail: session.user.email || '', 
+            }));
+          }
+        })
+        .catch(err => {
+          console.error("Failed to fetch profile for checkout", err);
+          // If it fails, just pre-fill the email
+          setFormData(prevData => ({
+            ...prevData,
+            customerEmail: session.user.email || '',
+          }));
+        });
+
+    }
+  }, [status, session]);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -180,7 +214,7 @@ export default function CheckoutPage() {
                       name="customerName"
                       value={formData.customerName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none text-gray-900"
                       placeholder="Enter your name"
                       required
                     />
@@ -196,7 +230,7 @@ export default function CheckoutPage() {
                       name="customerPhone"
                       value={formData.customerPhone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none text-gray-900"
                       placeholder="+91 XXXXX XXXXX"
                       required
                     />
@@ -212,7 +246,7 @@ export default function CheckoutPage() {
                       name="customerEmail"
                       value={formData.customerEmail}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none text-gray-900"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -233,7 +267,7 @@ export default function CheckoutPage() {
                       value={formData.deliveryAddress}
                       onChange={handleInputChange}
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none text-gray-900"
                       placeholder="House/Flat No., Street, Area, Landmark"
                       required
                     />
