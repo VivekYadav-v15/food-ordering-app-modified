@@ -9,16 +9,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ==================== Customer ====================
+
 model Customer {
-  customer_id String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String?
+  customer_id  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String?
   phone_number String?
-  status      String?
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  orders      Order[]
+  status       String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  orders       Order[]
 }
+
+// ==================== Restaurant ====================
 
 model Restaurant {
   restaurant_id   String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -34,7 +38,12 @@ model Restaurant {
   updated_at      DateTime   @updatedAt
   menu_items      MenuItem[]
   orders          Order[]
+
+  // ✅ Added index to support orderBy on rating
+  @@index([rating])
 }
+
+// ==================== MenuItem ====================
 
 model MenuItem {
   item_id       String      @id @default(auto()) @map("_id") @db.ObjectId
@@ -50,6 +59,8 @@ model MenuItem {
   restaurant    Restaurant  @relation(fields: [restaurant_id], references: [restaurant_id])
   order_items   OrderItem[]
 }
+
+// ==================== Order ====================
 
 model Order {
   order_id      String           @id @default(auto()) @map("_id") @db.ObjectId
@@ -70,6 +81,8 @@ model Order {
   deliveries    Delivery[]
 }
 
+// ==================== OrderItem ====================
+
 model OrderItem {
   order_item_id        String   @id @default(auto()) @map("_id") @db.ObjectId
   order_id             String   @db.ObjectId
@@ -83,6 +96,8 @@ model OrderItem {
   order                Order    @relation(fields: [order_id], references: [order_id])
   menu_item            MenuItem @relation(fields: [item_id], references: [item_id])
 }
+
+// ==================== Delivery ====================
 
 model Delivery {
   delivery_id             String          @id @default(auto()) @map("_id") @db.ObjectId
@@ -100,6 +115,8 @@ model Delivery {
   driver                  DeliveryDriver  @relation(fields: [driver_id], references: [driver_id])
 }
 
+// ==================== DeliveryDriver ====================
+
 model DeliveryDriver {
   driver_id            String     @id @default(auto()) @map("_id") @db.ObjectId
   name                 String
@@ -116,8 +133,7 @@ model DeliveryDriver {
   orders               Order[]
 }
 
-
-//Next-Auth
+// ==================== NextAuth Models ====================
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId

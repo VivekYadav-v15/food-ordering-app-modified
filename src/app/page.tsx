@@ -43,8 +43,8 @@ export default function HomePage() {
       const response = await fetch('/api/restaurants?canteen=false');
       const data = await response.json();
       if (Array.isArray(data)) {
-  setRestaurants(data.slice(0, 6)); // Show only top 6 for homepage
-}
+        setRestaurants(data.slice(0, 6)); // Show only top 6 for homepage
+      }
     } catch (error) {
       console.error('Error fetching restaurants:', error);
     } finally {
@@ -77,19 +77,17 @@ export default function HomePage() {
     { number: "4.8★", label: "Average Rating" }
   ];
 
-    return (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0">
-          {/* --- PASTE YOUR NEW IMAGE CODE HERE --- */}
-  <img 
-    src="https://plus.unsplash.com/premium_photo-1661766131927-5026561fd0cc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070" 
-    alt="Hero background" 
-    className="absolute inset-0 w-full h-full object-cover opacity-30 backdrop-blur-sm"
-  />
-
+          <img 
+            src="https://plus.unsplash.com/premium_photo-1661766131927-5026561fd0cc?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070" 
+            alt="Hero background" 
+            className="absolute inset-0 w-full h-full object-cover opacity-30 backdrop-blur-sm"
+          />
           <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
           <div className="absolute top-40 right-10 w-96 h-96 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
           <div className="absolute -bottom-8 left-20 w-80 h-80 bg-gradient-to-r from-red-500/20 to-pink-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style={{ animationDelay: '4s' }}></div>
@@ -175,7 +173,6 @@ export default function HomePage() {
                     alt="Delicious Indian Food"
                     className="w-full h-full object-cover rounded-3xl"
                   />
-                  
                 </div>
                 
                 {/* Floating Cards */}
@@ -309,73 +306,94 @@ export default function HomePage() {
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
-                <div className="h-48 bg-gray-300"></div>
-                <div className="p-6 space-y-3">
-                  <div className="h-6 bg-gray-300 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                  <div className="h-48 bg-gray-300"></div>
+                  <div className="p-6 space-y-3">
+                    <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {restaurants.map((restaurant, index) => (
-            <motion.div
-              key={restaurant.restaurant_id}
+              {restaurants.map((restaurant, index) => (
+                <motion.div
+                  key={restaurant.restaurant_id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   whileHover={{ y: -10 }}
-              onClick={() => router.push(`/restaurant/${restaurant.restaurant_id}`)}
-              className="dark-surface rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition-all"
-            >
-                  <div className="relative h-48 overflow-hidden">
+                  onClick={() => router.push(`/restaurant/${restaurant.restaurant_id}`)}
+                  className="dark-surface rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition-all group"
+                >
+                  {/* Enhanced Restaurant Image */}
+                  <div className="relative h-56 overflow-hidden">
                     <img 
-                      src={restaurant.image_url || `https://images.unsplash.com/photo-1613564834361-9436948817d1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGl6emF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=900`}
+                      src={
+                        restaurant.image_url || 
+                        (restaurant.name === 'Biryani Palace' 
+                          ? '/images/restaurants/biryani-palace.jpg'
+                          : restaurant.name === 'Swaad Of India' 
+                          ? '/images/restaurants/swaad.jpg'
+                          : restaurant.name === 'Curry House'
+                          ? '/images/restaurants/curry-house.jpg'
+                          : `https://images.unsplash.com/photo-1613564834361-9436948817d1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGl6emF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=900`)
+                      }
                       alt={restaurant.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    <div className="absolute top-4 right-4 glass-effect px-3 py-1 rounded-full shadow-md flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-semibold text-white">
-                    {restaurant.rating.toFixed(1)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-heading-elegant font-elegant font-bold text-white mb-2">
-                  {restaurant.name}
-                </h3>
-                
-                <div className="space-y-2 mb-4">
-                  {restaurant.cuisine_type && (
-                    <div className="flex items-center text-gray-300">
-                          <span className="text-orange-400 mr-2">🍽️</span>
-                      <span className="text-sm">{restaurant.cuisine_type}</span>
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                    
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                    
+                    {/* Rating Badge */}
+                    <div className="absolute top-4 right-4 glass-effect px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 backdrop-blur-md">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-bold text-white">
+                        {restaurant.rating.toFixed(1)}
+                      </span>
                     </div>
-                  )}
-                  
-                  {restaurant.address && (
-                    <div className="flex items-start text-gray-300">
-                      <MapPin className="w-4 h-4 text-orange-400 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm line-clamp-2">{restaurant.address}</span>
+                    
+                    {/* Food Emoji Badge */}
+                    <div className="absolute bottom-4 left-4 text-4xl drop-shadow-lg animate-bounce-slow">
+                      🍽️
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                <button className="w-full btn-primary flex items-center justify-center gap-2">
-                  View Menu
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
-          </div>
-        )}
+                  <div className="p-6">
+                    <h3 className="text-heading-elegant font-elegant font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
+                      {restaurant.name}
+                    </h3>
+                    
+                    <div className="space-y-2 mb-4">
+                      {restaurant.cuisine_type && (
+                        <div className="flex items-center text-gray-300">
+                          <span className="text-orange-400 mr-2">🍛</span>
+                          <span className="text-sm">{restaurant.cuisine_type}</span>
+                        </div>
+                      )}
+                      
+                      {restaurant.address && (
+                        <div className="flex items-start text-gray-300">
+                          <MapPin className="w-4 h-4 text-orange-400 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm line-clamp-2">{restaurant.address}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <button className="w-full btn-primary flex items-center justify-center gap-2 group-hover:scale-105 transition-transform">
+                      View Menu
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -411,7 +429,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => router.push('/restaurant')}
-                className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-3 text-lg shadow-lg"
+                className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-3 text-lg shadow-lg hover:scale-105"
               >
                 <Utensils className="w-6 h-6" />
                 Start Ordering
@@ -419,7 +437,7 @@ export default function HomePage() {
               </button>
               <button
                 onClick={() => router.push('/canteen')}
-                className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-3 text-lg"
+                className="border-2 border-white text-white hover:bg-white hover:text-orange-600 font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-3 text-lg hover:scale-105"
               >
                 <Coffee className="w-6 h-6" />
                 Visit Canteen
@@ -428,6 +446,21 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      <style jsx global>{`
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 2s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }

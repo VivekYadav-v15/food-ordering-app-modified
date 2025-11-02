@@ -116,11 +116,14 @@ export default function CanteenPage() {
               transition={{ duration: 0.6 }}
               className="text-center"
             >
-              <div className="w-24 h-24 glass-effect-light rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <div className="w-24 h-24 glass-effect-light rounded-2xl flex items-center justify-center mx-auto mb-6 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                  src="/images/canteen/canteen-logo.jpg"
                   alt="Canteen Food"
-                  className="w-16 h-16 rounded-xl object-cover"
+                  className="w-full h-full rounded-xl object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80";
+                  }}
                 />
               </div>
               <h1 className="text-display-large font-display font-bold mb-4">NSUT Canteen</h1>
@@ -160,16 +163,26 @@ export default function CanteenPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.05 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="dark-surface rounded-xl shadow-lg overflow-hidden border-2 border-orange-500/20 hover:border-orange-400 transition-all"
+                  className="dark-surface rounded-xl shadow-lg overflow-hidden border-2 border-orange-500/20 hover:border-orange-400 transition-all group"
                 >
-                  {/* Item Image */}
-                  <div className="h-32 relative overflow-hidden">
+                  {/* Item Image with Enhanced Effects */}
+                  <div className="h-40 relative overflow-hidden bg-gradient-to-br from-orange-300 to-yellow-300">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                    
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20"></div>
+                    
+                    {/* Main Image */}
                     <img 
-                      src={`https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80`}
+                      src={`/images/canteen/${item.name.toLowerCase().replace(/\s+/g, '-')}.jpg`}
                       alt={item.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.parentElement!.innerHTML = '<div class="flex items-center justify-center h-full text-6xl animate-pulse">🍽️</div>';
+                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   </div>
 
                   <div className="p-4">
@@ -200,7 +213,7 @@ export default function CanteenPage() {
                         <div className="flex items-center justify-center border-2 border-orange-400/30 rounded-lg bg-orange-500/10">
                           <button
                             onClick={() => updateQuantity(item.item_id, -1)}
-                            className="p-2 hover:bg-orange-500/20 transition-colors"
+                            className="p-2 hover:bg-orange-500/20 transition-colors rounded-l-lg"
                           >
                             <Minus className="w-4 h-4 text-orange-400" />
                           </button>
@@ -209,7 +222,7 @@ export default function CanteenPage() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.item_id, 1)}
-                            className="p-2 hover:bg-orange-500/20 transition-colors"
+                            className="p-2 hover:bg-orange-500/20 transition-colors rounded-r-lg"
                           >
                             <Plus className="w-4 h-4 text-orange-400" />
                           </button>
@@ -218,7 +231,7 @@ export default function CanteenPage() {
                         {/* Add Button */}
                         <button
                           onClick={() => handleAddToCart(item)}
-                          className="w-full btn-canteen flex items-center justify-center gap-2"
+                          className="w-full btn-canteen flex items-center justify-center gap-2 hover:scale-105 transition-transform"
                         >
                           <ShoppingBag className="w-4 h-4" />
                           Add to Order
@@ -241,8 +254,8 @@ export default function CanteenPage() {
             className="mb-12"
           >
             <div className="flex items-center gap-3 mb-6">
-              <Coffee className="w-8 h-8 text-orange-600" />
-              <h2 className="text-heading-elegant font-elegant font-bold text-gray-900">Beverages</h2>
+              <Coffee className="w-8 h-8 text-orange-400" />
+              <h2 className="text-heading-elegant font-elegant font-bold text-white">Beverages</h2>
             </div>
             
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -253,53 +266,68 @@ export default function CanteenPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 + index * 0.05 }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-yellow-200 hover:border-yellow-400 transition-all"
+                  className="dark-surface rounded-xl shadow-lg overflow-hidden border-2 border-orange-500/20 hover:border-orange-400 transition-all"
                 >
-                  <div className="h-32 bg-gradient-to-br from-yellow-300 to-orange-300 flex items-center justify-center text-5xl">
-                    {item.name.includes('Tea') ? '☕' :
-                     item.name.includes('Coffee') ? '🧋' : '🥤'}
+                  <div className="h-40 relative overflow-hidden bg-gradient-to-br from-yellow-300 to-orange-300 group">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                    
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent z-20"></div>
+                    
+                    {/* Main Image */}
+                    <img 
+                      src={`/images/canteen/${item.name.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const emoji = item.name.includes('Tea') ? '☕' : item.name.includes('Coffee') ? '🧋' : '🥤';
+                        e.currentTarget.parentElement!.innerHTML = `<div class="flex items-center justify-center h-full text-6xl animate-pulse">${emoji}</div>`;
+                      }}
+                    />
                   </div>
 
                   <div className="p-4">
-                    <h3 className="text-heading-elegant font-elegant font-bold text-gray-900 mb-1">
+                    <h3 className="text-heading-elegant font-elegant font-bold text-white mb-1">
                       {item.name}
                     </h3>
                     
                     {item.description && (
-                      <p className="text-xs text-gray-600 mb-3">
+                      <p className="text-xs text-gray-300 mb-3">
                         {item.description}
                       </p>
                     )}
 
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-2xl font-bold text-orange-600">
+                      <span className="text-2xl font-bold text-orange-400">
                         ₹{item.price}
                       </span>
                     </div>
 
                     {item.is_available && (
                       <div className="space-y-2">
-                        <div className="flex items-center justify-center border-2 border-orange-300 rounded-lg bg-orange-50">
+                        <div className="flex items-center justify-center border-2 border-orange-400/30 rounded-lg bg-orange-500/10">
                           <button
                             onClick={() => updateQuantity(item.item_id, -1)}
-                            className="p-2 hover:bg-orange-100 transition-colors"
+                            className="p-2 hover:bg-orange-500/20 transition-colors rounded-l-lg"
                           >
-                            <Minus className="w-4 h-4 text-orange-600" />
+                            <Minus className="w-4 h-4 text-orange-400" />
                           </button>
-                          <span className="px-4 font-bold text-orange-600">
+                          <span className="px-4 font-bold text-orange-400">
                             {quantities[item.item_id] || 1}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.item_id, 1)}
-                            className="p-2 hover:bg-orange-100 transition-colors"
+                            className="p-2 hover:bg-orange-500/20 transition-colors rounded-r-lg"
                           >
-                            <Plus className="w-4 h-4 text-orange-600" />
+                            <Plus className="w-4 h-4 text-orange-400" />
                           </button>
                         </div>
                         
                         <button
                           onClick={() => handleAddToCart(item)}
-                          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                          className="w-full btn-canteen flex items-center justify-center gap-2 hover:scale-105 transition-transform"
                         >
                           <ShoppingBag className="w-4 h-4" />
                           Add to Order
@@ -323,7 +351,7 @@ export default function CanteenPage() {
         >
           <button
             onClick={() => router.push('/cart')}
-            className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-6 py-4 shadow-2xl flex items-center gap-3 font-semibold text-lg"
+            className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white rounded-full px-6 py-4 shadow-2xl flex items-center gap-3 font-semibold text-lg transition-all hover:scale-110"
           >
             <ShoppingBag className="w-6 h-6" />
             View Order ({getTotalItems()})
